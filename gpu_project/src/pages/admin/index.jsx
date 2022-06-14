@@ -12,11 +12,6 @@ export default class Admin extends Component {
     const menu = (
       <Menu>
           <Menu.Item>
-             <a target="_blank" href="/modifyUserInfo">
-              <UserOutlined style={{ marginRight:7 }}/>用户
-             </a>
-          </Menu.Item>
-          <Menu.Item>
              <a target="_blank" href="/modifyPassword" rel="noopener noreferrer" >
                 <FormOutlined style={{ marginRight:7 }}/>修改密码
              </a>
@@ -30,17 +25,17 @@ export default class Admin extends Component {
     );
     return (
       <Layout style={{minHeight:'100%'}}>
-        <Header style={{position: 'fixed',zIndex: 1000, width: '100%', height: '66px'}} className="flex bg-white items-center">
+        <Header style={{position: 'fixed',zIndex: 1, width: '100%', height: '66px'}} className="flex bg-white items-center">
           {/* <img src={headerLogo} alt="" className='w-32 h-8 float-left'/> */}
           <div className='flex items-center space-x-8'>
             <h1 className='text-lg font-bold text-gray-700'>Nettrix 宁畅</h1>
             <AppHeader/>
           </div>
-          <Dropdown overlay={menu} trigger={['click']} placement="bottomCenter">
+          <Dropdown overlay={menu} trigger={['click']} placement="bottom">
             <UserOutlined className="text-xl ml-auto"/>
           </Dropdown>
         </Header>
-        <Content style={{ padding:'30px 30px 0'}}>
+        <Content style={{marginTop: 66, backgroundColor: '#eee'}}>
           <AppContent/>
         </Content>
         <Footer style={{textAlign: 'center'}}>

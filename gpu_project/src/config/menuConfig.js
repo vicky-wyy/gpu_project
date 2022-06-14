@@ -1,8 +1,8 @@
 const menuList = [
   {
-    title: '首页',
+    title: '主页',
     key: '/home',
-    roles: ['admin',"guest"]
+    roles: ['admin','guest']
   },
   {
     title: '资源',
