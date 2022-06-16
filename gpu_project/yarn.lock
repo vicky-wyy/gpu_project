@@ -3164,6 +3164,11 @@ body-parser@1.20.0:
     type-is "~1.6.18"
     unpipe "1.0.0"
 
+bodymovin@^4.13.0:
+  version "4.13.0"
+  resolved "https://registry.npmmirror.com/bodymovin/-/bodymovin-4.13.0.tgz#06d97c0130e2334dccb33bea638136f88a74540b"
+  integrity sha512-SdBh+kue99zDxUGe0tpX7HJ8LMpRac46jcHcWAdHJDW9Aa5Dhcc62uGn03XQS8soF5/NWx7KBzPadgm+FbtDGA==
+
 bonjour-service@^1.0.11:
   version "1.0.13"
   resolved "https://registry.npmmirror.com/bonjour-service/-/bonjour-service-1.0.13.tgz#4ac003dc1626023252d58adf2946f57e5da450c1"
@@ -3659,6 +3664,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmmirror.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -5050,6 +5060,11 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, 
   version "4.2.10"
   resolved "https://registry.npmmirror.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
+
+gsap@^3.10.4:
+  version "3.10.4"
+  resolved "https://registry.npmmirror.com/gsap/-/gsap-3.10.4.tgz#db89a6b8f6d5cb76e274eae822cbc1aa4d31e88f"
+  integrity sha512-6QatdkKxXCMfvCW4rM++0RqyLQAzFX5nwl3yHS0XPgkZBkiSEY3VZVbMltrdtsbER/xZonLtyHt684wRp4erlQ==
 
 gzip-size@^6.0.0:
   version "6.0.0"

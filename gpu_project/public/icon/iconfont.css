@@ -1,0 +1,163 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3466560 */
+  src: url('iconfont.woff2?t=1655286347485') format('woff2'),
+       url('iconfont.woff?t=1655286347485') format('woff'),
+       url('iconfont.ttf?t=1655286347485') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dianhua3:before {
+  content: "\e61b";
+}
+
+.icon-31dianhua:before {
+  content: "\e601";
+}
+
+.icon-group48:before {
+  content: "\e638";
+}
+
+.icon-dianhua4:before {
+  content: "\e62d";
+}
+
+.icon-dianhua5:before {
+  content: "\e731";
+}
+
+.icon-dianhua6:before {
+  content: "\e64c";
+}
+
+.icon-dianhua7:before {
+  content: "\e60b";
+}
+
+.icon-dianhua8:before {
+  content: "\e643";
+}
+
+.icon-24gl-phoneLoudspeaker:before {
+  content: "\e94f";
+}
+
+.icon-24gl-telephone:before {
+  content: "\e953";
+}
+
+.icon-dianhua9:before {
+  content: "\e610";
+}
+
+.icon-dianhua10:before {
+  content: "\e8ad";
+}
+
+.icon-dianhua11:before {
+  content: "\e672";
+}
+
+.icon-dianhua12:before {
+  content: "\e63b";
+}
+
+.icon-dianhua1:before {
+  content: "\e88b";
+}
+
+.icon-youxiang5:before {
+  content: "\e774";
+}
+
+.icon-youxiang6:before {
+  content: "\e908";
+}
+
+.icon-dianhua2:before {
+  content: "\eb23";
+}
+
+.icon-youxiang7:before {
+  content: "\e71f";
+}
+
+.icon-dianhuatianchong:before {
+  content: "\e678";
+}
+
+.icon-youxiang:before {
+  content: "\e633";
+}
+
+.icon-youxiang1:before {
+  content: "\e623";
+}
+
+.icon-dianhua:before {
+  content: "\e62a";
+}
+
+.icon-youxiang2:before {
+  content: "\e62c";
+}
+
+.icon-youxiang3:before {
+  content: "\e69d";
+}
+
+.icon-youxiang4:before {
+  content: "\e605";
+}
+
+.icon-suoding:before {
+  content: "\e600";
+}
+
+.icon-jiesuo:before {
+  content: "\e669";
+}
+
+.icon-suo:before {
+  content: "\e625";
+}
+
+.icon-icon_user:before {
+  content: "\e642";
+}
+
+.icon-suoding1:before {
+  content: "\e8d4";
+}
+
+.icon-user:before {
+  content: "\e63c";
+}
+
+.icon-user1:before {
+  content: "\e6e1";
+}
+
+.icon-user2:before {
+  content: "\e7ae";
+}
+
+.icon-suoding2:before {
+  content: "\eac3";
+}
+
+.icon-user3:before {
+  content: "\e632";
+}
+
+.icon-user4:before {
+  content: "\e619";
+}
+

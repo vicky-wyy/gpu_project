@@ -87,11 +87,13 @@ export default class Resource extends Component {
         <Tabs defaultActiveKey='1'>
           <TabPane tab="硬件资源" key='1'>
             <Table
+              bordered
               columns={columns} 
               dataSource={data}
               scroll={{
                 x:1000
               }}
+              className="border-gray-300"
             >
             </Table>
           </TabPane>
