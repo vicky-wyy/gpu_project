@@ -1,25 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
-import { Layout, Dropdown, Menu } from 'antd';
+import { Layout, Dropdown, Menu, Modal } from 'antd';
+import { Link } from 'react-router-dom';
 import { UserOutlined, FormOutlined, PoweroffOutlined } from '@ant-design/icons';
 import AppHeader from '@components/AppHeader';
 import AppContent from '@components/AppContent';
+import { logout } from '@/utils/session';
 // import headerLogo from '@assets/img/nettrix_logo.png'
 const { Header, Content, Footer } = Layout;
 
 export default class Admin extends Component {
+  onLogout = ()=>{
+    Modal.confirm({
+      title: "注销",
+      content: "确定要退出系统吗?",
+      okText: "确定",
+      cancelText: "取消",
+      onOk: () => {
+        logout();
+        this.props.history.push('/login');
+      },
+    });
+  }
   render() {
     const menu = (
       <Menu>
-          <Menu.Item>
-             <a target="_blank" href="/modifyPassword" rel="noopener noreferrer" >
-                <FormOutlined style={{ marginRight:7 }}/>修改密码
-             </a>
+          <Menu.Item key='modifyPassword'>
+            <FormOutlined style={{ marginRight:7 }}/>
+            <Link to='/modifyPassword'>修改密码</Link>
           </Menu.Item>
-          <Menu.Item>
-             <a onClick = {this.logout}>
-               <PoweroffOutlined style={{ marginRight:7 }}/>退出登录
-             </a>
+          <Menu.Item key='logout' onClick={this.onLogout}>
+            <PoweroffOutlined style={{ marginRight:7 }}/>退出登录
           </Menu.Item>
       </Menu>
     );
