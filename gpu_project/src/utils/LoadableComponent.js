@@ -3,9 +3,10 @@ import Loadable from 'react-loadable';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 class LoadingPage extends Component {
-  UNSAFE_componentWillMount(){
+  UNSAFE_componentWillMount() {
     NProgress.start();
   }
+  
   componentWillUnmount() {
     NProgress.done()
   }

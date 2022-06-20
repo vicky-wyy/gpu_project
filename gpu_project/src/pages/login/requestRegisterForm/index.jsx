@@ -37,17 +37,21 @@ class RequestRegisterForm extends Component {
     .then(response => {
       const res = response.data;
       if(res.status==='success'){
+        message.success('注册成功');
         this.setState({
           loading: false
         });
         hide();
-        message.success('注册成功');
       }else {
         console.log('注册失败')
       }
     })
     .catch(error => {
       message.error('您的邮箱已被注册，请直接登录')
+      this.setState({
+        loading: false
+      });
+      hide();
     })
   }
   /**

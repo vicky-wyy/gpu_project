@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
-import { Layout, Dropdown, Menu, Modal } from 'antd';
+import { Layout, Dropdown, Menu, Modal, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { UserOutlined, FormOutlined, PoweroffOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import qs from 'qs';
 import AppHeader from '@components/AppHeader';
 import AppContent from '@components/AppContent';
 import { logout } from '@/utils/session';
@@ -11,14 +13,36 @@ const { Header, Content, Footer } = Layout;
 
 export default class Admin extends Component {
   onLogout = ()=>{
+    const data = qs.stringify({});
+    const token = localStorage.getItem('token');
     Modal.confirm({
       title: "注销",
       content: "确定要退出系统吗?",
       okText: "确定",
       cancelText: "取消",
-      onOk: () => {
-        logout();
-        this.props.history.push('/login');
+      onOk: async () => {
+        await axios({
+          method: 'post',
+          url: '/api1/api/v1/auth/logout',
+          data: data,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          const res = response.data
+          console.log(res);
+          if(res.status==='success'){
+            message.success('登出成功');
+            logout();
+            this.props.history.replace('/login');
+          }
+        })
+        .catch(error => {
+          message.error('退出失败');
+          console.log(error);
+        })
       },
     });
   }

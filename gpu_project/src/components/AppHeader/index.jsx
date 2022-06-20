@@ -24,6 +24,7 @@ class AppHeader extends Component {
 	// 		</Menu.Item>
 	// 	)
 	// }
+
   getMenuNodes = (menuList)=>{
     const path = this.props.location.pathname
     return menuList.reduce((pre,item)=>{

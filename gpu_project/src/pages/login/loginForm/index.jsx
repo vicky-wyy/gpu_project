@@ -6,8 +6,6 @@ import axios from 'axios';
 import qs from 'qs';
 import { authenticateSuccess } from '@/utils/session';
 
-// import PromptBox from '@/components/PromptBox';
-
 class LoginForm extends Component {
   state = {
     focusItem: -1,
@@ -47,7 +45,6 @@ class LoginForm extends Component {
     })
     .then(response => {
       const res = response.data
-      console.log(res);
       if(res.status==='success'){
         message.success('登录成功');
         localStorage.setItem('token', res.access_token);
@@ -56,8 +53,7 @@ class LoginForm extends Component {
       }
     })
     .catch(error => {
-      message.error('没有权限');
-      console.log(error);
+      message.error('您没有权限登录该系统,请先注册，或者检查输入');
     })
   }
   /**
