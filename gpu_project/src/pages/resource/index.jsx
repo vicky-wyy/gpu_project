@@ -83,7 +83,7 @@ export default class Resource extends Component {
       }
     ]
     return (
-      <Layout className='m-3 bg-white rounded shadow-md p-4'>
+      <Layout className='m-3 bg-white rounded shadow-md p-4 layout-container'>
         <Tabs defaultActiveKey='1'>
           <TabPane tab="硬件资源" key='1'>
             <Table

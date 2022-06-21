@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3466560 */
-  src: url('iconfont.woff2?t=1655286347485') format('woff2'),
-       url('iconfont.woff?t=1655286347485') format('woff'),
-       url('iconfont.ttf?t=1655286347485') format('truetype');
+  src: url('iconfont.woff2?t=1655790752509') format('woff2'),
+       url('iconfont.woff?t=1655790752509') format('woff'),
+       url('iconfont.ttf?t=1655790752509') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,118 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gongsimingcheng:before {
+  content: "\e61d";
+}
+
+.icon-xingye:before {
+  content: "\e61e";
+}
+
+.icon-icon-person:before {
+  content: "\e607";
+}
+
+.icon-xingming:before {
+  content: "\e609";
+}
+
+.icon-xingming1:before {
+  content: "\e635";
+}
+
+.icon-gongsimingcheng1:before {
+  content: "\e60c";
+}
+
+.icon-xingming2:before {
+  content: "\e60d";
+}
+
+.icon-ziyuan:before {
+  content: "\e657";
+}
+
+.icon-zhiweishenfen:before {
+  content: "\e676";
+}
+
+.icon-gongsimingcheng2:before {
+  content: "\e629";
+}
+
+.icon-hangye:before {
+  content: "\e6f5";
+}
+
+.icon-gongsi-:before {
+  content: "\e613";
+}
+
+.icon-gongsimingcheng3:before {
+  content: "\e65c";
+}
+
+.icon-zhiweiguanli:before {
+  content: "\e680";
+}
+
+.icon-gongsi:before {
+  content: "\e62e";
+}
+
+.icon-zhenshixingming:before {
+  content: "\e689";
+}
+
+.icon-hangye1:before {
+  content: "\e662";
+}
+
+.icon-icon_gongsi:before {
+  content: "\e60e";
+}
+
+.icon-gongsi1:before {
+  content: "\e679";
+}
+
+.icon-zhiweiguanli1:before {
+  content: "\e63d";
+}
+
+.icon-gongsiguanli:before {
+  content: "\e60a";
+}
+
+.icon-job:before {
+  content: "\e617";
+}
+
+.icon-job1:before {
+  content: "\e65a";
+}
+
+.icon-xingming_icon:before {
+  content: "\e64d";
+}
+
+.icon-xingming3:before {
+  content: "\e6ad";
+}
+
+.icon-xingming4:before {
+  content: "\e640";
+}
+
+.icon-hangye2:before {
+  content: "\e66d";
+}
+
+.icon-xingming5:before {
+  content: "\e60f";
 }
 
 .icon-dianhua3:before {

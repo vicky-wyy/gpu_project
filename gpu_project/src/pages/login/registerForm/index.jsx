@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Button, Row, Col } from 'antd';
-
+import { Form, Input, Button, Row, Col, message } from 'antd';
+import axios from 'axios';
+import qs from 'qs';
 class RegisterForm extends Component {
   state = {
     loading: false,
@@ -11,8 +12,61 @@ class RegisterForm extends Component {
 
   formRef = React.createRef()
 
-  onFinish = (values)=>{
-    console.log(values)
+  onFinish = async (values)=>{
+
+    if(this.state.loading){
+      return
+    }
+    this.setState({
+      loading: true
+    })
+    const hide = message.loading('注册中...', 0)
+    const data = {
+      'email':values.email,
+      'first_name':values.first_name,
+      'last_name': values.last_name,
+      'company': values.company,
+      'job_role': values.job_role,
+      'industry': values.industry,
+      'password': values.password
+    };
+    const data1 = qs.stringify(data);
+    await axios({
+      method: 'post',
+      url: '/api1/api/v1/auth/register',
+      data: data1,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+    .then(response => {
+      const res = response.data
+      if(response.status===201){
+        localStorage.setItem('token', res.access_token);
+        this.backLogin();
+        message.success('注册成功，请直接登录');
+      }
+    })
+    .catch(error => {
+      if(error.response){
+        const res = error.response
+        if(res.status===409){
+          message.error('您已经注册，请直接登录即可');
+          this.backLogin();
+        }else if(res.status===400){
+          message.error('您没有权限登录该系统')
+        }else {
+          message.error('服务器错误，请稍后再试')
+        }
+      }else {
+        message.error('注册失败');
+        console.log(error.message)
+      }
+    })
+    this.setState({
+      loading: false
+    })
+    hide();
   }
   /**
    * 返回登录面板
@@ -27,7 +81,7 @@ class RegisterForm extends Component {
     const { focusItem } = this.state
     return (
       <div className='h-64'>
-        <h1 className='text-2xl font-semibold text-indigo-200 -mt-16 mb-8 ml-28'>用户注册</h1>
+        <h1 className='text-2xl font-semibold text-indigo-200 -mt-16 mb-8 text-center'>用户注册</h1>
         <Form
           onFinish={this.onFinish}
           ref={this.formRef}
@@ -37,19 +91,17 @@ class RegisterForm extends Component {
               <Form.Item
                 wrapperCol={{ span: 28, pull: focusItem === 0 ? 1 : 0 }}
                 labelCol={{ span: 3, pull: focusItem === 0 ? 1 : 0 }}
-                name='username'
+                name='email'
                 rules={[
-                  { required: true, message: '用户名不能为空' },
-                  { pattern: /^[^\s']+$/, message: '不能输入特殊字符' },
-                  { min: 3, message: '用户名至少为3位' }
+                  { required: true, message: '请输入您的邮件地址'},
+                  { pattern: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/, message: '邮箱格式不正确'}
               ]}
               >
                 <Input 
-                  prefix={<i className='iconfont icon-user' style={{ opacity: focusItem === 0 ? 1 : 0.6 }} />}
-                  placeholder="请输入用户名"
+                  prefix={<i className='iconfont icon-youxiang5' style={{ opacity: focusItem === 0 ? 1 : 0.6 }} />}
+                  placeholder="请输入邮箱"
                   onFocus={() => this.setState({ focusItem: 0 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
                   className='rounded-md border-0'
                   autoComplete='off'
                 />
@@ -59,15 +111,54 @@ class RegisterForm extends Component {
               <Form.Item
                 wrapperCol={{ span: 28, pull: focusItem === 1 ? 1 : 0 }}
                 labelCol={{ span: 3, pull: focusItem === 1 ? 1 : 0 }}
-                name='email'
+                name='first_name'
+                rules={[
+                  { required: true, message: '请输入first_name'}
+                ]}
+              >
+                <Input
+                  prefix={<i className='iconfont icon-user' style={{ opacity: focusItem === 1 ? 1 : 0.6 }} />}
+                  className='rounded-md border-0'
+                  onFocus={() => this.setState({ focusItem: 1 })}
+                  onBlur={() => this.setState({ focusItem: -1 })}
+                  placeholder='请输入first_name'
+                  autoComplete='off'
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                wrapperCol={{ span: 28, pull: focusItem === 2 ? 1 : 0 }}
+                labelCol={{ span: 3, pull: focusItem === 2 ? 1 : 0 }}
+                name='last_name'
+                rules={[
+                  { required: true, message: '请输入last_name'}
+                ]}
+              >
+                <Input
+                  prefix={<i className='iconfont icon-xingming3' style={{ opacity: focusItem === 2 ? 1 : 0.6 }} />}
+                  className='rounded-md border-0'
+                  onFocus={() => this.setState({ focusItem: 2 })}
+                  onBlur={() => this.setState({ focusItem: -1 })}
+                  onPressEnter={this.onFinish}
+                  placeholder='请输入last_name'
+                  autoComplete='off'
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                wrapperCol={{ span: 28, pull: focusItem === 3 ? 1 : 0 }}
+                labelCol={{ span: 3, pull: focusItem === 3 ? 1 : 0 }}
+                name='company'
                 rules={[
                   { required: true, message: '请输入您的公司'}
                 ]}
               >
                 <Input
-                  prefix={<i className='iconfont icon-youxiang5' style={{ opacity: focusItem === 1 ? 1 : 0.6 }} />}
+                  prefix={<i className='iconfont icon-gongsimingcheng3' style={{ opacity: focusItem === 3 ? 1 : 0.6 }} />}
                   className='rounded-md border-0'
-                  onFocus={() => this.setState({ focusItem: 1 })}
+                  onFocus={() => this.setState({ focusItem: 3 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
                   onPressEnter={this.onFinish}
                   placeholder='请输入公司'
@@ -77,67 +168,22 @@ class RegisterForm extends Component {
             </Col>
             <Col span={12}>
               <Form.Item
-                wrapperCol={{ span: 28, pull: focusItem === 2 ? 1 : 0 }}
-                labelCol={{ span: 3, pull: focusItem === 2 ? 1 : 0 }}
-                name='email'
-                rules={[
-                  { required: true, message: '请输入您的职位'}
-                ]}
-              >
-                <Input
-                  prefix={<i className='iconfont icon-youxiang5' style={{ opacity: focusItem === 2 ? 1 : 0.6 }} />}
-                  className='rounded-md border-0'
-                  onFocus={() => this.setState({ focusItem: 2 })}
-                  onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
-                  placeholder='请输入职位'
-                  autoComplete='off'
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                wrapperCol={{ span: 28, pull: focusItem === 3 ? 1 : 0 }}
-                labelCol={{ span: 3, pull: focusItem === 3 ? 1 : 0 }}
-                name='email'
-                rules={[
-                  { required: true, message: '请输入您的领域'}
-                ]}
-              >
-                <Input
-                  prefix={<i className='iconfont icon-youxiang5' style={{ opacity: focusItem === 3 ? 1 : 0.6 }} />}
-                  className='rounded-md border-0'
-                  onFocus={() => this.setState({ focusItem: 3 })}
-                  onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
-                  placeholder='请输入领域'
-                  autoComplete='off'
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
                 wrapperCol={{ span: 28, pull: focusItem === 4 ? 1 : 0 }}
                 labelCol={{ span: 3, pull: focusItem === 4 ? 1 : 0 }}
-                name='phone'
+                name='job_role'
                 rules={[
                   {
                     required: true,
-                    message:'请输入您的手机号码'
-                  },
-                  {
-                    pattern: /^1(3[0-9]|4[01456879]|5[0-3,5-9]|6[2567]|7[0-8]|8[0-9]|9[0-3,5-9])\d{8}$/,
-                    message: '请输入正确的手机号'
+                    message:'请输入您的job_role'
                   }
                 ]}
               >
                 <Input
-                  prefix={<i className='iconfont icon-group48' style={{ opacity: focusItem === 4 ? 1 : 0.6 }}/>}
+                  prefix={<i className='iconfont icon-job1' style={{ opacity: focusItem === 4 ? 1 : 0.6 }}/>}
                   className='rounded-md border-0'
                   onFocus={() => this.setState({ focusItem: 4 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
-                  placeholder='请输入手机号码'
+                  placeholder='请输入job_role'
                   autoComplete='off'
                 />
               </Form.Item>
@@ -146,18 +192,18 @@ class RegisterForm extends Component {
               <Form.Item
                 wrapperCol={{ span: 28, pull: focusItem === 5 ? 1 : 0 }}
                 labelCol={{ span: 3, pull: focusItem === 5 ? 1 : 0 }}
-                name='email'
+                name='industry'
                 rules={[
-                  { required: true, message: '请输入关注的GPU'}
+                  { required: true, message: '请输入行业'}
                 ]}
               >
                 <Input
-                  prefix={<i className='iconfont icon-youxiang5' style={{ opacity: focusItem === 5 ? 1 : 0.6 }} />}
+                  prefix={<i className='iconfont icon-zhiweiguanli1' style={{ opacity: focusItem === 5 ? 1 : 0.6 }} />}
                   className='rounded-md border-0'
                   onFocus={() => this.setState({ focusItem: 5 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
                   onPressEnter={this.onFinish}
-                  placeholder='请输入关注的GPU'
+                  placeholder='请输入您的行业'
                   autoComplete='off'
                 />
               </Form.Item>
@@ -168,10 +214,9 @@ class RegisterForm extends Component {
                 labelCol={{ span: 3, pull: focusItem === 6 ? 1 : 0 }}
                 name='password'
                 rules={[
-                  {
-                    required: true,
-                    message: '请输入密码'
-                  }
+                  { required: true, message: '密码不能为空' },
+                  { pattern: '^[^ ]+$', message: '密码不能有空格' },
+                  { min: 6, message: '密码至少为6位' },
                 ]}
               >
                 <Input 
@@ -179,7 +224,6 @@ class RegisterForm extends Component {
                   type="password" 
                   onFocus={() => this.setState({ focusItem: 6 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
                   placeholder="请输入密码"
                   className='rounded-md border-0'
                   autoComplete='off'
@@ -190,12 +234,20 @@ class RegisterForm extends Component {
               <Form.Item
                 wrapperCol={{ span: 28, pull: focusItem === 6 ? 1 : 0 }}
                 labelCol={{ span: 3, pull: focusItem === 6 ? 1 : 0 }}
-                name='password'
+                name='re_password'
                 rules={[
                   {
                     required: true,
                     message: '请确认密码'
-                  }
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('两次输入的密码不一致，请确认后输入'));
+                    },
+                  }),
                 ]}
               >
                 <Input 
@@ -203,7 +255,6 @@ class RegisterForm extends Component {
                   type="password" 
                   onFocus={() => this.setState({ focusItem: 6 })}
                   onBlur={() => this.setState({ focusItem: -1 })}
-                  onPressEnter={this.onFinish}
                   placeholder="请确认密码"
                   className='rounded-md border-0'
                   autoComplete='off'
@@ -220,12 +271,6 @@ class RegisterForm extends Component {
                 <Button type='primary' ghost onClick={this.backLogin} className='h-9 rounded-md' style={{width:'150px'}}>返回登录</Button>
               </Form.Item>
             </Col>
-            {/* <Form.Item>
-              <div className='flex space-x-4 ml-2'>
-                <Button type="primary" htmlType="submit" className='h-9 rounded-md' >注册</Button>
-                <Button type='primary' ghost onClick={this.backLogin} className='h-9 rounded-md' style={{width:'150px'}}>返回登录</Button>
-              </div>
-            </Form.Item> */}
           </Row>
           
         </Form>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LoadableComponent from '@/utils/LoadableComponent';
-import AdminRoute from '@/components/AdminRoute';
+// import AdminRoute from '@/components/AdminRoute';
 
 const Home = LoadableComponent(()=>import('@/pages/home'))
 const Resource = LoadableComponent(()=>import('@/pages/resource'))

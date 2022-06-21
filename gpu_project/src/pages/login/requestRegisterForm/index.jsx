@@ -67,7 +67,7 @@ class RequestRegisterForm extends Component {
     const { focusItem } = this.state
     return (
       <div className='h-64'>
-        <h1 className='text-2xl font-semibold text-indigo-200 -mt-4 mb-12 ml-28'>请求注册</h1>
+        <h1 className='text-2xl font-semibold text-indigo-200 -mt-4 mb-12 text-center'>请求注册</h1>
         <Form
           onFinish={this.onFinish}
           ref={this.formRef}

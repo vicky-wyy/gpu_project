@@ -45,7 +45,7 @@ class LoginForm extends Component {
     })
     .then(response => {
       const res = response.data
-      if(res.status==='success'){
+      if(response.status===200){
         message.success('登录成功');
         localStorage.setItem('token', res.access_token);
         authenticateSuccess(res.access_token);
@@ -53,7 +53,18 @@ class LoginForm extends Component {
       }
     })
     .catch(error => {
-      message.error('您没有权限登录该系统,请先注册，或者检查输入');
+      if(error.response){
+        const res = error.response
+        if(res.status===401){
+          message.error('您输入的邮箱和密码不匹配，请确认后输入')
+        }else if(res.status===400){
+          message.error('您没有权限登录该系统，请先注册')
+        }else {
+          message.error('服务器错误，请稍后再试')
+        }
+      }else {
+        console.log(error.message)
+      }
     })
   }
   /**
@@ -72,14 +83,14 @@ class LoginForm extends Component {
     const { focusItem, loading } = this.state
     return (
       <div>
-        <h1 className='text-2xl font-semibold text-indigo-200 -mt-8 mb-12 ml-28'>用户登录</h1>
+        <h1 className='text-2xl font-semibold text-indigo-200 -mt-8 mb-12 text-center'>用户登录</h1>
         <Spin spinning={loading} tip='登录中...'/>
         <Form
           onFinish={this.onFinish}
           ref={this.formRef}
         >
           <Form.Item
-            wrapperCol={{ span: 28, pull: focusItem === 0 ? 1 : 0 }}
+            wrapperCol={{ span: 24, pull: focusItem === 0 ? 1 : 0 }}
             labelCol={{ span: 3, pull: focusItem === 0 ? 1 : 0 }}
             name='email'
             rules={[
@@ -97,7 +108,7 @@ class LoginForm extends Component {
             />
           </Form.Item>
           <Form.Item
-            wrapperCol={{ span: 28, pull: focusItem === 1 ? 1 : 0 }}
+            wrapperCol={{ span: 24, pull: focusItem === 1 ? 1 : 0 }}
             labelCol={{ span: 3, pull: focusItem === 1 ? 1 : 0 }}
             name='password'
             rules={[
