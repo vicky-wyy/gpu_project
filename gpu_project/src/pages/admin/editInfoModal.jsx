@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, message, Modal } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
-
+import { unauthorized } from '@/utils/session';
 const token = localStorage.getItem('token');
 
 export default class EditInfoModal extends Component {
@@ -30,7 +30,17 @@ export default class EditInfoModal extends Component {
       })
     })
     .catch(error => {
-      console.log(error);
+      if(error.response){
+        const res = error.response
+        if(res.status===400){
+          message.error('您没有权限退出');
+        }else if(res.status===401){
+          message.error('Token无效或者过期');
+          unauthorized();
+        }else {
+          message.error('服务器错误，请稍后再试')
+        }
+      }
     })
   }
 
@@ -67,7 +77,21 @@ export default class EditInfoModal extends Component {
       })
       .catch(error => {
         message.error('信息修改失败');
+        if(error.response){
+          const res = error.response
+          if(res.status===400){
+            message.error('您没有权限退出');
+          }else if(res.status===401){
+            message.error('Token无效或者过期');
+            unauthorized();
+          }else {
+            message.error('服务器错误，请稍后再试')
+          }
+        }
       })
+    })
+    .catch(error => {
+      console.log('修改信息失败');
     })
   }
 

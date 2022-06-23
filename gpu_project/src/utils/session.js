@@ -12,6 +12,11 @@ export function authenticateSuccess(token){
 export function logout() {  
   return Cookies.remove(LOGIN_COOKIE_NAME)
 }
+
+export function unauthorized() {
+  logout();
+  window.location.href='/login'
+}
 // export function isAuthenticated() {
 //   return _getCookie(LOGIN_COOKIE_NAME)
 // }

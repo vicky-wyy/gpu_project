@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Modal, Form, Input, message } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
-import { logout } from '@/utils/session';
+import { unauthorized } from '@/utils/session';
 
 const token = localStorage.getItem('token')
 export default class EditPasswordModal extends Component {
@@ -40,8 +40,7 @@ export default class EditPasswordModal extends Component {
           const res = error.response
           if(res.status===401){
             message.error('token已失效，请重新登录')
-            logout();
-            this.props.history.replace('/login');
+            unauthorized();
           }else{
             message.error('token验证失败');
           }
@@ -50,6 +49,9 @@ export default class EditPasswordModal extends Component {
           console.log(error.message)
         }
       })
+    })
+    .catch(error => {
+      console.log('修改密码失败');
     })
   }
   render() {

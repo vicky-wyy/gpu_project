@@ -5,6 +5,7 @@ import { Form, Input, Button, message, Checkbox, Spin } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
 import { authenticateSuccess } from '@/utils/session';
+import Cookies from 'js-cookie';
 
 class LoginForm extends Component {
   state = {
@@ -14,58 +15,47 @@ class LoginForm extends Component {
 
   formRef = React.createRef()
 
-  onFinish = async (values)=>{
-    // var data =new FormData();
-    // data.append('email',values.email);
-    // data.append('password',values.password);
-    // axios({
-    //   method: 'post',
-    //   url: 'http://10.0.76.190:5000/api/v1/auth/login',
-    //   data: data,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // }).then(response => {
-    //   const res = response.data;
-    //   if(res.status==='success'){
-    //     console.log('成功')
-    //   }
-    // }).catch(error => {
-    //   console.log(error)
-    // })
-    const data = {'email':values.email,'password':values.password}
-    const data1 = qs.stringify(data)
-    await axios({
-      method: 'post',
-      url: '/api1/api/v1/auth/login',
-      data: data1,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-    .then(response => {
-      const res = response.data
-      if(response.status===200){
-        message.success('登录成功');
-        localStorage.setItem('token', res.access_token);
-        authenticateSuccess(res.access_token);
-        this.props.history.replace('/');
-      }
-    })
-    .catch(error => {
-      if(error.response){
-        const res = error.response
-        if(res.status===401){
-          message.error('您输入的邮箱和密码不匹配，请确认后输入')
-        }else if(res.status===400){
-          message.error('您没有权限登录该系统，请先注册')
-        }else {
-          message.error('服务器错误，请稍后再试')
-        }
-      }else {
-        console.log(error.message)
-      }
-    })
+  onFinish = ()=>{
+    this.formRef.current.validateFields()
+      .then(async(values) => {
+        const data = {'email':values.email,'password':values.password}
+        const data1 = qs.stringify(data)
+        await axios({
+          method: 'post',
+          url: '/api1/api/v1/auth/login',
+          data: data1,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+        .then(response => {
+          const res = response.data
+          if(response.status===200){
+            message.success('登录成功');
+            Cookies.set('token', res.access_token);
+            // localStorage.setItem('token', res.access_token);
+            // authenticateSuccess(res.access_token);
+            this.props.history.replace('/');
+          }
+        })
+        .catch(error => {
+          if(error.response){
+            const res = error.response
+            if(res.status===401){
+              message.error('您输入的邮箱和密码不匹配，请确认后输入')
+            }else if(res.status===400){
+              message.error('您没有权限登录该系统，请先注册')
+            }else {
+              message.error('服务器错误，请稍后再试')
+            }
+          }else {
+            console.log(error.message)
+          }
+        })
+      })
+      .catch(error => {
+        console.log('登录失败');
+      })
   }
   /**
    * 转换面板为注册面板

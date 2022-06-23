@@ -6,8 +6,9 @@ import axios from 'axios';
 import qs from 'qs';
 import AppHeader from '@components/AppHeader';
 import AppContent from '@components/AppContent';
-import { logout } from '@/utils/session';
+import { logout, unauthorized } from '@/utils/session';
 import LoadableComponent from '@/utils/LoadableComponent'
+import Cookies from 'js-cookie';
 // import headerLogo from '@assets/img/nettrix_logo.png'
 const { Header, Content, Footer } = Layout;
 
@@ -20,7 +21,8 @@ export default class Admin extends Component {
   }
   onLogout = ()=>{
     const data = qs.stringify({});
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
+    const token = Cookies.get('token')
     Modal.confirm({
       title: "注销",
       content: "确定要退出系统吗?",
@@ -50,8 +52,7 @@ export default class Admin extends Component {
               message.error('您没有权限退出');
             }else if(res.status===401){
               message.error('Token无效或者过期');
-              logout();
-              this.props.history.replace('/login');
+              unauthorized();
             }else {
               message.error('服务器错误，请稍后再试')
             }
@@ -110,9 +111,9 @@ export default class Admin extends Component {
         <Content style={{marginTop: 66, backgroundColor: '#eee'}}>
           <AppContent/>
         </Content>
-        <Footer style={{textAlign: 'center'}}>
+        {/* <Footer style={{textAlign: 'center'}}>
           Ant Design ©2018 Created by Ant UED
-        </Footer>
+        </Footer> */}
         <EditInfoModal toggleVisible={this.toggleInfoVisible} visible={infoVisible} />
         <EditPasswordModal toggleVisible={this.togglePasswordVisble} visible={passwordVisible} />
       </Layout>
