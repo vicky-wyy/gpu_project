@@ -8,7 +8,6 @@ const Resource = LoadableComponent(()=>import('@/pages/resource'))
 const Monitor = LoadableComponent(()=>import('@/pages/monitor'))
 const Experience = LoadableComponent(()=>import('@/pages/experience'))
 const Management = LoadableComponent(()=>import('@/pages/management'))
-const ModifyPassword = LoadableComponent(()=>import('@/pages/modifyPassword'))
 
 export default class AppContent extends Component {
   render() {
@@ -20,7 +19,6 @@ export default class AppContent extends Component {
         <Route path='/monitor' component={Monitor}/>
         <Route path='/experience' component={Experience}/>
         <Route path='/management' component={Management}/>
-        <Route path='/modifyPassword' component={ModifyPassword}/>
       </Switch>
     )
   }

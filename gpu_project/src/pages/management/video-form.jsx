@@ -11,7 +11,6 @@ export default class VideoForm extends Component {
   }
   render() {
     const { video_record } = this.props;
-    console.log(video_record.video_filepath)
     const normFile = (e) => {
       console.log('Upload event:', e);
       if (Array.isArray(e)) {
@@ -39,7 +38,7 @@ export default class VideoForm extends Component {
           <Input placeholder='请输入视频标题' allowClear className='rounded-md'/>
         </Form.Item>
         <Form.Item
-          name='video_filepath'
+          name='content'
           label='视频内容'
           rules={[
             {
@@ -47,7 +46,6 @@ export default class VideoForm extends Component {
               message: '请上传视频'
             }
           ]}
-          initialValue={video_record.video_filepath}
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >

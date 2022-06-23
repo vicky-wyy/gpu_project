@@ -31,8 +31,10 @@ export default class EditPasswordModal extends Component {
       })
       .then(response => {
         if(response.status===200){
-          message.success('密码修改成功');
           this.handleCancel();
+          message.success('密码修改成功，请重新登录');
+          localStorage.removeItem('token');
+          window.location.href='/login'
         }
       })
       .catch(error => {

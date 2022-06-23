@@ -14,7 +14,7 @@ export function logout() {
 }
 
 export function unauthorized() {
-  logout();
+  localStorage.removeItem('token')
   window.location.href='/login'
 }
 // export function isAuthenticated() {

@@ -35,8 +35,6 @@ BraftEditor.use()
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
 
-const token = localStorage.getItem('token')
-
 function createMarkup(html){
   return { __html: html }
 }
@@ -60,7 +58,11 @@ export default class Management extends Component {
     isShow: 0
   }
   formRef = React.createRef();
+
+  /** 获取文章 */
   getArticles =async (current_page=1)=>{
+    const token = localStorage.getItem('token');
+    console.log(token)
     const { pagination } = this.state
     const data = {'page':current_page, 'per_page': pagination.pageSize};
     this.setState({
@@ -93,18 +95,21 @@ export default class Management extends Component {
       if(error.response){
         const res = error.response
         if(res.status===400){
-          message.error('您没有权限退出');
+          message.error('验证失败');
         }else if(res.status===401){
-          message.error('Token无效或者过期');
+          message.error('Token无效或者过期，请重新登录');
           unauthorized();
         }else {
           message.error('服务器错误，请稍后再试')
         }
+      }else {
+        message.error('操作失败');
       }
     })
   }
 
   getVideos = async (current_page=1)=>{
+    const token = localStorage.getItem('token')
     const { videoPagination } = this.state;
     const data = {'page':current_page, 'per_page': videoPagination.pageSize};
     this.setState({
@@ -134,11 +139,22 @@ export default class Management extends Component {
       }
     })
     .catch(error => {
-      message.error('请求失败');
-      console.log(error);
+      if(error.response){
+        const res = error.response
+        if(res.status===400){
+          message.error('验证失败');
+        }else if(res.status===401){
+          message.error('Token无效或者过期，请重新登录');
+          unauthorized();
+        }else {
+          message.error('服务器错误，请稍后再试')
+        }
+      }else {
+        message.error('操作失败');
+      }
     })
   }
-
+  /** 上传文章富文本的操作 */
   handleEditorChange = (editorState)=>{
     this.setState({
       editorState
@@ -147,12 +163,12 @@ export default class Management extends Component {
 
   /* 发布文章 */
   onFinish = async (values)=>{
+    const token = localStorage.getItem('token');
     if(this.state.editorState.isEmpty()){
       message.warning('请先输入内容')
       return
     }
     const htmlContent = this.state.editorState.toHTML()
-    console.log(token)
     const data = {'title': values.title, 'article_content': htmlContent}
     const data1 = qs.stringify(data)
     await axios({
@@ -166,7 +182,7 @@ export default class Management extends Component {
     })
     .then(response => {
       if(response.status===201){
-        message.success('上传成功');
+        message.success('文章上传成功');
         this.getArticles();
         this.formRef.current.resetFields();
         this.setState({
@@ -175,7 +191,21 @@ export default class Management extends Component {
       }
     })
     .catch(error => {
-      message.error('上传失败');
+      if(error.response){
+        const res = error.response
+        if(res.status===400){
+          message.error('验证失败');
+        }else if(res.status===401){
+          message.error('Token无效或者过期，请重新登录');
+          unauthorized();
+        }else if(res.status===403){
+          message.error('您没有该操作的权限');
+        }else {
+          message.error('服务器错误，请稍后再试');
+        }
+      }else {
+        message.error('操作失败');
+      }
     })
   }
   /* 重置文章按钮 */
@@ -196,6 +226,7 @@ export default class Management extends Component {
         this.setState({
           isShow: 0
         })
+        const token = localStorage.getItem('token')
         const article_record = this.article_record
         const data = {'title':values.title, 'article_content': values.article_content}
         const data1 = qs.stringify(data)
@@ -218,13 +249,16 @@ export default class Management extends Component {
           if(error.response){
             const res = error.response
             if(res.status===400){
-              message.error('验证失败')
+              message.error('验证失败');
             }else if(res.status===401){
-              message.error('您没有该操作的权限');
+              message.error('token过期或者无效，请重新登录');
+              unauthorized();
             }else if(res.status===404){
-              message.error('文章找不到')
+              message.error('文章找不到');
+            }else if(res.status===403){
+              message.error('您没有该操作的权限');
             }else {
-              message.error('服务器错误，请稍后再试')
+              message.error('服务器错误，请稍后再试');
             }
           }else {
             message.error('修改失败');
@@ -242,6 +276,7 @@ export default class Management extends Component {
   }
   /* 删除文章 */
   confirmDel = async(record)=>{
+    const token = localStorage.getItem('token')
     await axios({
       method: 'delete',
       url: `/api1/api/v1/articles/${record.article_id}`,
@@ -251,7 +286,6 @@ export default class Management extends Component {
       }
     })
     .then(response => {
-      console.log(response)
       if(response.status===204){
         message.success('删除成功');
         this.getArticles();
@@ -263,6 +297,9 @@ export default class Management extends Component {
         if(res.status===400){
           message.error('验证失败')
         }else if(res.status===401){
+          message.error('token过期或者无效，请重新登录');
+          unauthorized();
+        }else if(res.status===403){
           message.error('您没有该操作的权限');
         }else if(res.status===404){
           message.error('文章找不到')
@@ -270,9 +307,9 @@ export default class Management extends Component {
           message.error('服务器错误，请稍后再试')
         }
       }else {
+        message.error('删除失败');
         console.log(error.message)
       }
-      message.error('删除失败');
     })
   }
   /* article的table分页 */
@@ -307,15 +344,16 @@ export default class Management extends Component {
   uploadVideo = ()=>{
     this.pw.current.validateFields()
       .then(async(values) => {
+        this.setState({
+          loading: true
+        })
+        const token = localStorage.getItem('token')
         if(!this.state.fileList.length){
           message.warning('请选择要上传的文件');
         }
         var data = new FormData();
         data.append('files[]', this.state.fileList[0].originFileObj);
         data.append('title', values.title);
-        this.setState({
-          loading: true
-        })
         await axios({
           method: 'post',
           url: '/api1/api/v1/videos',
@@ -329,19 +367,37 @@ export default class Management extends Component {
             message.success('上传成功');
             this.getVideos();
             this.pw.current.resetFields();
+            this.setState({
+              loading: false
+            })
           }
         }).catch(error => {
-          console.log(error);
-          message.error('上传失败');
-        }).finally(()=> {
-          this.setState({
-            loading: false
-          })
+          if(error.response){
+            const res = error.response
+            if(res.status===400){
+              message.error('验证失败');
+            }else if(res.status===401){
+              message.error('Token无效或者过期，请重新登录');
+              unauthorized();
+            }else if(res.status===403){
+              message.error('您没有该操作的权限');
+            }else if(res.status===500){
+              message.error('服务器错误，请稍后再试')
+            }else {
+              message.error('上传失败,请稍后再试');
+            }
+            this.setState({
+              loading: false
+            })
+          }
         })
       })
-      .catch( error => {
+      .catch(error => {
         console.log(error);
         console.log('视频操作失败');
+        this.setState({
+          loading: false
+        })
       })
   }
   /** 编辑视频Modal */
@@ -355,7 +411,7 @@ export default class Management extends Component {
   editVideo = ()=>{
     this.form.current.validateFields()
       .then(async(values) => {
-        console.log(values)
+        const token = localStorage.getItem('token');
         this.setState({
           isShow: 0,
           loading: true
@@ -380,18 +436,17 @@ export default class Management extends Component {
             })
             this.getVideos();
           }
-          console.log(response)
         }).catch(error => {
+          console.log(error)
           message.error('视频更新失败');
           this.setState({
             loading: false
           })
-          console.log(error)
         })
       })
       .catch( error => {
-        console.log('视频操作失败');
         console.log(error)
+        console.log('视频操作失败');
         this.setState({
           loading: false
         })
@@ -399,6 +454,7 @@ export default class Management extends Component {
   }
   /** 下载视频 */
   downVideo = async (record)=>{
+    const token = localStorage.getItem('token');
     this.setState({
       loading: true,
     });
@@ -426,6 +482,7 @@ export default class Management extends Component {
   }
   /** 删除视频 */
   confirmVideoDel = async(record)=>{
+    const token = localStorage.getItem('token')
     await axios({
       method: 'delete',
       url: `/api1/api/v1/videos/${record.video_id}`,
@@ -447,16 +504,18 @@ export default class Management extends Component {
         if(res.status===400){
           message.error('验证失败')
         }else if(res.status===401){
-          message.error('您没有该操作的权限');
+          message.error('token过期或者无效，请重新登录');
+        }else if(res.status===403){
+          message.error('您没有该操作的权限')
         }else if(res.status===404){
           message.error('文章找不到')
         }else {
           message.error('服务器错误，请稍后再试')
         }
       }else {
+        message.error('删除失败');
         console.log(error.message)
       }
-      message.error('删除失败');
     })
   }
 
@@ -619,7 +678,7 @@ export default class Management extends Component {
                       <BraftEditor
                         value={editorState}
                         onChange={this.handleEditorChange}
-                        contentStyle={{height:300}}
+                        contentStyle={{height:265}}
                         className='rounded-md shadow-sm border'
                       />
                     </Form.Item>
@@ -710,6 +769,12 @@ export default class Management extends Component {
                 />
               </TabPane>      
             </Tabs>
+          </TabPane>
+          <TabPane tab='机台硬件管理' key='4'>
+            <Table />
+          </TabPane>
+          <TabPane tab='机台软件管理' key='5'>
+            <Table />
           </TabPane>
         </Tabs>
         <Modal

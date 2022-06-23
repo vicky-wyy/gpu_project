@@ -3,7 +3,6 @@ import { Form, Input, message, Modal } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
 import { unauthorized } from '@/utils/session';
-const token = localStorage.getItem('token');
 
 export default class EditInfoModal extends Component {
   state = {
@@ -12,6 +11,7 @@ export default class EditInfoModal extends Component {
   formRef = React.createRef();
   /* 获取用户信息 */
   getUserInfo =async ()=>{
+    const token = localStorage.getItem('token');
     const data = JSON.stringify({});
     await axios({
       method: 'get',
@@ -24,6 +24,7 @@ export default class EditInfoModal extends Component {
       data: data
     })
     .then(response => {
+      console.log(response)
       const res = response.data;
       this.setState({
         user: res
@@ -33,9 +34,9 @@ export default class EditInfoModal extends Component {
       if(error.response){
         const res = error.response
         if(res.status===400){
-          message.error('您没有权限退出');
+          message.error('验证失败');
         }else if(res.status===401){
-          message.error('Token无效或者过期');
+          message.error('Token无效或者过期，请重新登录');
           unauthorized();
         }else {
           message.error('服务器错误，请稍后再试')
@@ -51,6 +52,7 @@ export default class EditInfoModal extends Component {
   handleOk = ()=>{
     this.formRef.current.validateFields()
     .then(async(values) => {
+      const token = localStorage.getItem('token');
       this.handleCancel();
       const data = {
         'first_name':values.first_name, 
@@ -83,7 +85,7 @@ export default class EditInfoModal extends Component {
             message.error('您没有权限退出');
           }else if(res.status===401){
             message.error('Token无效或者过期');
-            unauthorized();
+            // unauthorized();
           }else {
             message.error('服务器错误，请稍后再试')
           }
@@ -98,6 +100,9 @@ export default class EditInfoModal extends Component {
   UNSAFE_componentWillMount(){
     this.getUserInfo();
   }
+  // componentDidMount() {
+  //   this.getUserInfo();
+  // }
   render() {
     const { user } = this.state
     const { visible } = this.props

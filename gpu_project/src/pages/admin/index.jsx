@@ -8,12 +8,10 @@ import AppHeader from '@components/AppHeader';
 import AppContent from '@components/AppContent';
 import { logout, unauthorized } from '@/utils/session';
 import LoadableComponent from '@/utils/LoadableComponent'
-import Cookies from 'js-cookie';
-// import headerLogo from '@assets/img/nettrix_logo.png'
 const { Header, Content, Footer } = Layout;
 
-const EditInfoModal = LoadableComponent(()=>import('@/pages/admin/editInfoModal'));
-const EditPasswordModal = LoadableComponent(()=>import('@/pages/admin/editPasswordModal'));
+const EditInfoModal = LoadableComponent(()=>import('./editInfoModal'));
+const EditPasswordModal = LoadableComponent(()=>import('./editPasswordModal'));
 export default class Admin extends Component {
   state = {
     infoVisible: false,
@@ -21,8 +19,7 @@ export default class Admin extends Component {
   }
   onLogout = ()=>{
     const data = qs.stringify({});
-    // const token = localStorage.getItem('token');
-    const token = Cookies.get('token')
+    const token = localStorage.getItem('token');
     Modal.confirm({
       title: "注销",
       content: "确定要退出系统吗?",
@@ -40,7 +37,8 @@ export default class Admin extends Component {
         })
         .then(response => {
           if(response.status===200){
-            message.success('登出成功');
+            message.success('退出成功');
+            localStorage.removeItem('token');
             logout();
             this.props.history.replace('/login');
           }
@@ -51,7 +49,7 @@ export default class Admin extends Component {
             if(res.status===400){
               message.error('您没有权限退出');
             }else if(res.status===401){
-              message.error('Token无效或者过期');
+              message.error('Token无效或者过期,请重新登录');
               unauthorized();
             }else {
               message.error('服务器错误，请稍后再试')
@@ -97,7 +95,7 @@ export default class Admin extends Component {
       </Menu>
     );
     return (
-      <Layout style={{minHeight:'100%'}}>
+      <Layout style={{ minHeight: '100%' }}>
         <Header style={{position: 'fixed',zIndex: 1, width: '100%', height: '66px'}} className="flex bg-white items-center">
           {/* <img src={headerLogo} alt="" className='w-32 h-8 float-left'/> */}
           <div className='flex items-center space-x-8'>
@@ -108,7 +106,7 @@ export default class Admin extends Component {
             <UserOutlined className="text-xl ml-auto"/>
           </Dropdown>
         </Header>
-        <Content style={{marginTop: 66, backgroundColor: '#eee'}}>
+        <Content style={{marginTop: 66, backgroundColor: '#eee' }}>
           <AppContent/>
         </Content>
         {/* <Footer style={{textAlign: 'center'}}>

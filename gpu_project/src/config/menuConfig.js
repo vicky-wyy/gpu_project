@@ -17,7 +17,8 @@ const menuList = [
   },
   {
     title: '后台管理',
-    key: '/management'
+    key: '/management',
+    auth: true
   }
 ]
 export default menuList;

@@ -5,7 +5,6 @@ import { Form, Input, Button, message, Checkbox, Spin } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
 import { authenticateSuccess } from '@/utils/session';
-import Cookies from 'js-cookie';
 
 class LoginForm extends Component {
   state = {
@@ -32,9 +31,8 @@ class LoginForm extends Component {
           const res = response.data
           if(response.status===200){
             message.success('登录成功');
-            Cookies.set('token', res.access_token);
-            // localStorage.setItem('token', res.access_token);
-            // authenticateSuccess(res.access_token);
+            localStorage.setItem('token', res.access_token);
+            authenticateSuccess(res.access_token);
             this.props.history.replace('/');
           }
         })
@@ -42,9 +40,9 @@ class LoginForm extends Component {
           if(error.response){
             const res = error.response
             if(res.status===401){
-              message.error('您输入的邮箱和密码不匹配，请确认后输入')
+              message.error('您输入的邮箱和密码不匹配，或者您还未注册，请先注册');
             }else if(res.status===400){
-              message.error('您没有权限登录该系统，请先注册')
+              message.error('验证失败')
             }else {
               message.error('服务器错误，请稍后再试')
             }
